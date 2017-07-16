@@ -7,11 +7,12 @@ $apiConfig = json_decode(file_get_contents(dirname(__FILE__)."/config/api.json")
 
 //Query to get all titles
 $res = $mysqli->query("select 
+	node.nid as drupalid,
 	node.title as title, 
 	resume.field_resume_ficheserie_value as summary,
 	origname.field_nom_originale_value as original_name,
-	concat('https://geekseries.fr/sites/default/files/images_serie_interieur_grande/', image_in_url.filename) as image_in_url,
-	concat('https://geekseries.fr/sites/default/files/images_serie_grande/', image_out_url.filename) as image_out_url
+	concat('https://geekseries.fr/sites/default/files/', REPLACE(image_in_url.uri, 'public://', '')) as image_in_url,
+	concat('https://geekseries.fr/sites/default/files/', REPLACE(image_out_url.uri, 'public://', '')) as image_out_url
 from node
 	
 left outer join `field_data_field_resume_ficheserie` as resume on node.`nid` = `resume`.`entity_id`
